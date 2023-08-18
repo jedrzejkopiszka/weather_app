@@ -6,8 +6,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-# Your OpenWeatherMap API Key (register on their website to get this)
-API_KEY = '908f6a1b206d0baf8c3bed93c4138fe1'
+API_KEY = <API key>
 BASE_URL = "http://api.openweathermap.org/data/2.5/weather?"
 FORECAST_URL = "http://api.openweathermap.org/data/2.5/forecast?"
 
@@ -62,7 +61,7 @@ def get_multiple_weather():
     cities = request.json.get('cities', [])
     weather_data = []
     for city in cities:
-        data = get_weather_data(city)  # Assuming you have a function called get_weather_data
+        data = get_weather_data(city)  
         weather_data.append(data)
     return jsonify(weather_data)
 
@@ -78,13 +77,9 @@ def get_forecast():
     daily_max_temps = defaultdict(float)
 
     for forecast in data['list']:
-        # Convert the timestamp to a date string (without time)
         date_str = datetime.utcfromtimestamp(forecast['dt']).strftime('%Y-%m-%d')
+        temp = forecast['main']['temp'] - 273.15 
         
-        # Get the temperature for the current 3-hourly forecast (assuming it's in Kelvin)
-        temp = forecast['main']['temp'] - 273.15  # Convert Kelvin to Celsius
-        
-        # Update the maximum temperature for the day if the current temperature is higher
         daily_max_temps[date_str] = max(daily_max_temps[date_str], temp)
 
     return jsonify(dict(daily_max_temps))
