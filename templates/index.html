@@ -52,11 +52,9 @@
 </div>
 
 <script>
-    // Initialize the map with a default location (0, 0)
     let map = L.map('map').setView([46.921828, -4.158597],1);
     const cities = ["New York", "London", "Tokyo", "Paris"];
 
-    // Set up the map layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
@@ -72,7 +70,6 @@
         .openPopup();
     }
 
-    // Fetch weather data for the major cities on page load:
     fetch('/get_multiple_weather', {
         method: 'POST',
         headers: {
@@ -103,17 +100,14 @@
                 return;
             }
 
-            // Update weather details
             document.getElementById('cityName').textContent = data.city;
             document.getElementById('weatherIcon').src = "http://openweathermap.org/img/w/" + data.icon + ".png";
             document.getElementById('weatherIcon').style.display = "block";
             document.getElementById('weatherDescription').textContent = data.description;
-            document.getElementById('temperature').textContent = (data.temperature - 273.15).toFixed(0) + "°C";  // Convert Kelvin to Celsius
+            document.getElementById('temperature').textContent = (data.temperature - 273.15).toFixed(0) + "°C";  
             
-            // Update the map
             map.setView([data.lat, data.lon], 5);
             
-            // Add a marker with a popup
             L.marker([data.lat, data.lon]).addTo(map)
                 .bindPopup(`
                     <strong>${data.city}</strong><br>
